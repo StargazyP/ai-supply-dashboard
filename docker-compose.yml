@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ai-supply-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: ai_supply
+      POSTGRES_PASSWORD: ai_supply
+      POSTGRES_DB: ai_supply_db
+    volumes:
+      - ai_supply_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ai_supply -d ai_supply_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.crawler
+    container_name: ai-supply-scheduler
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://ai_supply:ai_supply@postgres:5432/ai_supply_db?schema=public
+      CRAWLER_TZ: Asia/Seoul
+      CRAWLER_SPOT_CRON: "30 18 * * *"
+      CRAWLER_CONTRACT_CRON: "0 10 1 * *"
+      CRAWLER_TSMC_CRON: "0 9 5 * *"
+      CRAWLER_INDICATOR_CRON: "0 9 1 * *"
+      SEC_USER_AGENT: "ai-supply-dashboard contact@stargazyp.com"
+
+volumes:
+  ai_supply_pgdata:
