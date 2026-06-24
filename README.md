@@ -15,6 +15,11 @@ AI·반도체 공급망 지표를 수집·분석해 사이클 점수, 수요/공
 | Analytics | Cycle Score, YoY/MoM, 상관관계, 이동평균·회귀 전망 |
 | Deploy | Docker, Docker Compose, nginx |
 
+## Changelog
+
+- **2026-06-18** — README 정리, Live [stargazy.com/ai-supply](https://stargazy.com/ai-supply) 운영.
+- **2026-05-27** — portfolio compose `ai-supply-dashboard` 연동·webhook CI/CD 후보 확인 (repo 동기화 상태).
+
 ## Features
 
 - 공급망 지표 크롤링 (ISM PMI, Nvidia DC Revenue, SEMI Billings, ASML/AMAT 매출, 재고일수 등)
